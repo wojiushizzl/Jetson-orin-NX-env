@@ -173,6 +173,8 @@ $ pip install ultralytics
 ```bash	
 $ pip install streamlit
 $ pip install -U streamlit-webrtc
+$ pip install playsound
+
 ```
 
 ## 11. Install VSCode  (optional)
@@ -182,9 +184,32 @@ $ pip install -U streamlit-webrtc
 $ sudo dpkg -i code_1.87.2-1709911730_arm64.deb
 ```
 
-## 12. Run yolov8 demo
+## 12. Install labelimg
+
+https://github.com/HumanSignal/labelImg
+```bash
+??
+```
 
 
+
+
+## 13. Run yolov8 demo
+
+```bash
+#run simple demo for predict single image
+cd JETSON-ORIN-NX-ENV
+cd demo
+conda activate yolov8
+python yolov8_demo.py
+```
+```bash
+#run webapp demo 
+cd JETSON-ORIN-NX-ENV
+cd streamlitapp
+conda activate yolov8
+streamlit run app.py
+```
 
 ## *. others
 ```bash
