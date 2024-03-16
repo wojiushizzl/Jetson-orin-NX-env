@@ -127,7 +127,6 @@ def infer_uploaded_video(conf, model):
                     vid_cap = cv2.VideoCapture(
                         tfile.name)
                     st_frame = st.empty()
-                    st_frame2 = st.empty()
 
                     while (vid_cap.isOpened()):
                         success, image = vid_cap.read()
@@ -135,7 +134,6 @@ def infer_uploaded_video(conf, model):
                             _display_detected_frames(conf,
                                                      model,
                                                      st_frame,
-                                                     st_frame2,
                                                      image
                                                      )
                         else:
