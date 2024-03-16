@@ -55,8 +55,11 @@ $ conda create -n yolov8 python=3.8
 
 #activate env
 $ conda activate yolov8
-```
 
+#remove env
+$ conda remove -n yolov8 --all
+
+```
 ## 4. Install nvidia-jetpack
 ```bash
 $ sudo apt upgrade
@@ -184,13 +187,35 @@ $ pip install playsound
 $ sudo dpkg -i code_1.87.2-1709911730_arm64.deb
 ```
 
-## 12. Install labelimg
+## 12. Install labelimg  (optional)
 
 https://github.com/HumanSignal/labelImg
 ```bash
-??
-```
+#install 
+conda create -n labelimg
+conda activate labelimg
+conda install pyqt=5
+conda install -c anaconda lxml
+pyrcc5 -o libs/resources.py resources.qrc
 
+#run labelimg
+python labelImg.py
+python labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
+
+```
+## 13. Install label-studio  (optional)
+[Label studio github](https://github.com/HumanSignal/label-studio?tab=readme-ov-file)
+
+```bash
+#Install with conda
+conda create --name label-studio
+conda activate label-studio
+conda install psycopg2
+pip install label-studio
+
+#run 
+label-studio
+```
 
 
 
