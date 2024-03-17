@@ -118,6 +118,7 @@ $ pip install numpy torch-1.8.0-cp36-cp36m-linux_aarch64.whl
 ```bash
 $ python
 ```
+
 ```python
 import torch
 print(torch.__version__)
@@ -172,12 +173,13 @@ print(torchvision.__version__)
 ```bash
 $ pip install ultralytics
 ```
-## 10. Install streamlit  streamlit-webrtc (optional)
+## 10. Install streamlit  etc. (optional)
 ```bash	
 $ pip install streamlit
 $ pip install -U streamlit-webrtc
 $ pip install playsound
-
+$ pip install -U hydralit_components
+$ pip install ruamel.yaml
 ```
 
 ## 11. Install VSCode  (optional)

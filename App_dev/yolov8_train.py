@@ -1,16 +1,19 @@
 from ultralytics import YOLO
 from multiprocessing import Process, freeze_support
+import os
 
 
-def train(project_name="my_first_project"):
-
+def train(project_name="test"):
+    project_path=os.path.join('projects',project_name)
+    yaml_path=os.path.join(project_path,'train.yaml')
+    result_path=os.path.join(project_path,'train')
     # Load a model
     model = YOLO('yolov8n.pt')  # load a pretrained model (recommended for training)
 
     # Train the model
     results = model.train(
-        data=project_name+".yaml", 
-        project=project_name,
+        data=yaml_path,
+        project=result_path,
         epochs=50,
         batch=2,
         imgsz=640)

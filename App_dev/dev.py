@@ -2,31 +2,41 @@
 # -*- coding: utf-8 -*-
 
 from pathlib import Path
-from PIL import Image
-import streamlit as st
 import os
+import streamlit as st
+import hydralit_components as hc
+import datetime
+from homePage import *
 
-# setting page layout
+#make it look nice from the start
 st.set_page_config(
     page_title="FAHAI_dev",
     page_icon='/home/zzl/Desktop/logo.png',
-    layout="wide",
-    initial_sidebar_state="expanded",
+    layout='wide',
+    initial_sidebar_state='collapsed',)
+
+# specify the primary menu definition
+menu_data = [
+    {'icon': "far fa-copy", 'label':"Page1"},
+    {'icon': "far fa-chart-bar", 'label':"Page2"},#no tooltip message
+]
+
+over_theme =  {'txc_inactive': 'white','menu_background':'#000080'}
+menu_id = hc.nav_bar(
+    menu_definition=menu_data,
+    override_theme=over_theme,
+    home_name='Home',
+    login_name='Logout',
+    hide_streamlit_markers=True, #will show the st hamburger as well as the navbar now!
+    sticky_nav=True, #at the top or not
+    sticky_mode='pinned', #jumpy or not-jumpy, but sticky or pinned
 )
 
-# sidebar
-st.sidebar.header("Develop Bar")
+#get the id of the menu item clicked
+st.info(f"{menu_id}")
 
 
-# select project
-
-
-
-# model options
-task_type = st.sidebar.selectbox(
-    "Select Task",
-    ['dataset','train','test','deploy']
-)
-
+if menu_id=='Home':
+    homepage()
 
 
