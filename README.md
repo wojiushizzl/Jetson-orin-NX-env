@@ -238,7 +238,7 @@ streamlit run app.py
 
 ## *. others
 ```bash
-check system version 
+#check system version 
 $ lsb_release -a
 #No LSB modules are available.
 #Distributor ID:	Ubuntu
@@ -246,14 +246,14 @@ $ lsb_release -a
 #Release:	20.04
 #Codename:	focal
 
-check system architecture
+#check system architecture
 $ dpkg --print-architecture
 #arm64
 
-check jetpack version
+#check jetpack version
 $ sudo apt-cache show nvidia-jetpack
 
-check LT4 version
+#check LT4 version
 $ cat /etc/nv_tegra_release 
 # R35 (release), REVISION: 3.1, GCID: 32827747, BOARD: t186ref, EABI: aarch64, DATE: Sun Mar 19 15:19:21 UTC 2023
 ```
