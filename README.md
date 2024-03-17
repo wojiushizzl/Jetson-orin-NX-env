@@ -231,11 +231,18 @@ conda activate yolov8
 python yolov8_demo.py
 ```
 ```bash
-#run webapp demo 
+#run webapp demo  user model
 cd JETSON-ORIN-NX-ENV
-cd streamlitapp
+cd App_user
 conda activate yolov8
 streamlit run app.py
+```
+```bash
+#run webapp demo  develop model
+cd JETSON-ORIN-NX-ENV
+cd App_dev
+conda activate yolov8
+streamlit run dev.py
 ```
 
 ## *. others

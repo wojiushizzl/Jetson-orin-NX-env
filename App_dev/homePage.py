@@ -76,8 +76,8 @@ def delete_project(selected_projects):
 def upload_images(selected_projects):
     # 创建一个用于保存图片的文件夹
     target_folder = os.path.join('projects', selected_projects)
-    target_folder = os.path.join(target_folder, "datasets\images")
-
+    target_folder = os.path.join(target_folder, "datasets")
+    target_folder = os.path.join(target_folder, "images")
     # 上传图片文件
     uploaded_files = st.file_uploader("上传图片", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
     # st.write(uploaded_files)
@@ -103,7 +103,8 @@ def upload_images(selected_projects):
 def upload_labels(selected_projects):
     # 创建一个用于保存标签的文件夹
     target_folder = os.path.join('projects', selected_projects)
-    target_folder = os.path.join(target_folder, "datasets\labels")
+    target_folder = os.path.join(target_folder, "datasets")
+    target_folder = os.path.join(target_folder, "labels")
 
     # 上传标签文件
     uploaded_files = st.file_uploader("上传标签", type=["txt"], accept_multiple_files=True)
