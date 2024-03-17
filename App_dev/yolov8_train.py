@@ -2,11 +2,7 @@ from ultralytics import YOLO
 from multiprocessing import Process, freeze_support
 
 
-
-
-def train():
-    #project name
-    project_name="my_first_project"
+def train(project_name="my_first_project"):
 
     # Load a model
     model = YOLO('yolov8n.pt')  # load a pretrained model (recommended for training)

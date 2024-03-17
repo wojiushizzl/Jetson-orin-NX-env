@@ -4,8 +4,8 @@
 from pathlib import Path
 from PIL import Image
 import streamlit as st
-from utils import *
 import os
+
 # setting page layout
 st.set_page_config(
     page_title="FAHAI_dev",
@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 # sidebar
-st.sidebar.header("Develop bar")
+st.sidebar.header("Develop Bar")
 
 
 # select project
@@ -27,5 +27,6 @@ task_type = st.sidebar.selectbox(
     "Select Task",
     ['dataset','train','test','deploy']
 )
+
 
 
