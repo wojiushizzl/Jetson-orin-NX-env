@@ -115,8 +115,11 @@ def upload_labels(selected_projects):
             st.success(f"标签已成功保存到 {filename}。")
 
 def train_project(selected_projects):
+    epochs=int(st.number_input('epochs'))
+    batch=int(st.number_input('batch'))
+
     if st.button("训练项目"):
-        train(selected_projects)
+        train(selected_projects,epochs,batch)
 
 
 def homepage():

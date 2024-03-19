@@ -36,7 +36,7 @@ menu_id = hc.nav_bar(
 )
 
 #get the id of the menu item clicked
-st.info(f"{menu_id}")
+# st.info(f"{menu_id}")
 
 
 if menu_id=='Home':

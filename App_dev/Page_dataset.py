@@ -1,12 +1,12 @@
 import os
 import streamlit as st
-from  yolov8_train import train
 import cv2
 from PIL import Image
 from streamlit_webrtc import webrtc_streamer
 import uuid
 import threading
 from streamlit_extras.grid import grid 
+from streamlit_extras.metric_cards import style_metric_cards
 
 def upload_images(selected_projects):
     # 创建一个用于保存图片的文件夹
@@ -66,34 +66,69 @@ def video_frame_callback(frame):
         img_container["img"] = img
     return frame
 
+def count_lines_in_file(file_path):
+    # 打开文件并逐行读取
+    with open(file_path, 'r') as file:
+        line_count = sum(1 for line in file)
+    return line_count
+def dataset_info(selected_projects):
+    images_path=os.path.join('projects',selected_projects,'datasets','images')
+    images_files = os.listdir(images_path)
+    images_files = [file for file in images_files if os.path.isfile(os.path.join(images_path, file))]
+    images_count=len(images_files)
+    labels_path=os.path.join('projects',selected_projects,'datasets','labels')
+    labels_files = os.listdir(labels_path)
+    labels_files = [file for file in labels_files if os.path.isfile(os.path.join(labels_path, file))]
+    labels_count=len(labels_files)-1 if len(labels_files)-1>=0 else 0
+    try:
+        classes_path=os.path.join('projects',selected_projects,'datasets','labels','classes.txt')
+        classes_count=count_lines_in_file(classes_path)
+    except:
+        classes_count = 0
+    col1, col2, col3 = st.columns(3)
+    col1.metric(label="Images", value=images_count)
+    col2.metric(label="Labels", value=labels_count)
+    col3.metric(label="Class", value=classes_count)
+
+    style_metric_cards()
 
 def datasetPage():
-
-    my_grid = grid([2], [2, 2],[2,2], vertical_align="bottom")
-
+    my_grid = grid([2,2], [8, 2],[1],[9,3,6], vertical_align="top")
     # Row 1:
     projects_list=get_all_projects()
     selected_projects = my_grid.selectbox('请选择一个项目：', projects_list)
     # Row 2:
-    with my_grid.expander("导入图片", expanded=False):
-        # 导入图片至目标项目
-        upload_images(selected_projects)
-    with my_grid.expander("导入标签", expanded=False):
-        # 导入标签至目标项目
-        upload_labels(selected_projects)
-
+    my_grid.markdown("---")
+    with my_grid.container():
+        dataset_info(selected_projects)
+    
+    with my_grid.container():
+        with st.expander("导入图片", expanded=False):
+            # 导入图片至目标项目
+            upload_images(selected_projects)
+        with st.expander("导入标签", expanded=False):
+            # 导入标签至目标项目
+            upload_labels(selected_projects)
+    my_grid.markdown("---")
     with my_grid.container():
         webrtc_ctx=webrtc_streamer(key="demo",video_frame_callback=video_frame_callback)
+
     image_name=str(uuid.uuid4())+".png"
-    target_folder = os.path.join('projects', selected_projects)
-    target_folder = os.path.join(target_folder, "datasets")
-    target_folder = os.path.join(target_folder, "images")
-    save_path = os.path.join(target_folder, image_name)
+    save_path = os.path.join('projects', selected_projects,'datasets','images',image_name)
     img=img_container["img"]
     if img is not None:
         pil_image=Image.fromarray(cv2.cvtColor(img,cv2.COLOR_BGR2RGB))
-    with my_grid.container():        
-        if st.button("save"):
+    if 'count' not in st.session_state:
+        st.session_state.count = 0
+    my_grid.metric(label="计数", value=st.session_state.count)
+
+    with my_grid.container(): 
+
+        sub_grid= grid([2,2], [8], [1],[1],[1],vertical_align="top")
+        if sub_grid.button("Save",use_container_width=True):
             pil_image.save(save_path)
-            st.success(f"Saved to {save_path}  successfully")
-            st.image(pil_image)
+            st.session_state.count+=1
+            sub_grid.success(f"Saved to {save_path}  successfully")
+            sub_grid.image(pil_image)
+        if sub_grid.button("Reset",use_container_width=True):
+            st.session_state.count=0

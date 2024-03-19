@@ -181,6 +181,7 @@ $ pip install playsound
 $ pip install -U hydralit_components
 $ pip install ruamel.yaml
 $ pip install streamlit-extras
+$ pip install streamlit_card
 ```
 
 ## 11. Install VSCode  (optional)
