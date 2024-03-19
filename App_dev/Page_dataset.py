@@ -7,6 +7,7 @@ import uuid
 import threading
 from streamlit_extras.grid import grid 
 from streamlit_extras.metric_cards import style_metric_cards
+from streamlit_extras.stylable_container import stylable_container
 
 def upload_images(selected_projects):
     # 创建一个用于保存图片的文件夹
@@ -93,23 +94,40 @@ def dataset_info(selected_projects):
     style_metric_cards()
 
 def datasetPage():
-    my_grid = grid([2,2], [8, 2],[1],[9,3,6], vertical_align="top")
+    my_grid = grid([2,2], [8, 2],[7,1,6], vertical_align="top")
     # Row 1:
     projects_list=get_all_projects()
     selected_projects = my_grid.selectbox('请选择一个项目：', projects_list)
     # Row 2:
     my_grid.markdown("---")
     with my_grid.container():
-        dataset_info(selected_projects)
+        with stylable_container(
+            key="green_button",
+            css_styles="""
+            {
+                border: 1px solid rgba(49, 51, 63, 0.2);
+                border-radius: 0.5rem;
+                padding: calc(1em - 1px)
+            }
+            """,):
+            dataset_info(selected_projects)
     
     with my_grid.container():
-        with st.expander("导入图片", expanded=False):
-            # 导入图片至目标项目
-            upload_images(selected_projects)
-        with st.expander("导入标签", expanded=False):
-            # 导入标签至目标项目
-            upload_labels(selected_projects)
-    my_grid.markdown("---")
+        with stylable_container(
+            key="green_button",
+            css_styles="""
+            {
+                border: 1px solid rgba(49, 51, 63, 0.2);
+                border-radius: 0.5rem;
+                padding: calc(1em - 1px)
+            }
+            """,):
+            with st.expander("导入图片", expanded=False):
+                # 导入图片至目标项目
+                upload_images(selected_projects)
+            with st.expander("导入标签", expanded=False):
+                # 导入标签至目标项目
+                upload_labels(selected_projects)
     with my_grid.container():
         webrtc_ctx=webrtc_streamer(key="demo",video_frame_callback=video_frame_callback)
 
@@ -120,15 +138,24 @@ def datasetPage():
         pil_image=Image.fromarray(cv2.cvtColor(img,cv2.COLOR_BGR2RGB))
     if 'count' not in st.session_state:
         st.session_state.count = 0
-    my_grid.metric(label="计数", value=st.session_state.count)
+    with my_grid.container():
+        st.metric(label="计数", value=st.session_state.count)
 
-    with my_grid.container(): 
-
-        sub_grid= grid([2,2], [8], [1],[1],[1],vertical_align="top")
-        if sub_grid.button("Save",use_container_width=True):
-            pil_image.save(save_path)
-            st.session_state.count+=1
-            sub_grid.success(f"Saved to {save_path}  successfully")
-            sub_grid.image(pil_image)
-        if sub_grid.button("Reset",use_container_width=True):
-            st.session_state.count=0
+    with my_grid.container():
+        with stylable_container(
+            key="green_button",
+            css_styles="""
+            {
+                border: 1px solid rgba(49, 51, 63, 0.2);
+                border-radius: 0.5rem;
+                padding: calc(1em - 1px)
+            }
+            """,):
+            sub_grid= grid([2,2], [8], [1],[1],[1],vertical_align="top")
+            if sub_grid.button("Save",use_container_width=True):
+                pil_image.save(save_path)
+                st.session_state.count+=1
+                sub_grid.success(f"Saved to {save_path}  successfully")
+                sub_grid.image(pil_image)
+            if sub_grid.button("Reset",use_container_width=True):
+                st.session_state.count=0
