@@ -6,7 +6,10 @@ import os
 import streamlit as st
 import hydralit_components as hc
 import datetime
-from homePage import *
+from Page_home import homepage
+from Page_dataset import datasetPage
+from Page_test import testpage
+
 
 #make it look nice from the start
 st.set_page_config(
@@ -17,7 +20,7 @@ st.set_page_config(
 
 # specify the primary menu definition
 menu_data = [
-    {'icon': "far fa-copy", 'label':"Page1"},
+    {'icon': "far fa-copy", 'label':"Dataset"},
     {'icon': "far fa-chart-bar", 'label':"Page2"},#no tooltip message
 ]
 
@@ -39,4 +42,9 @@ st.info(f"{menu_id}")
 if menu_id=='Home':
     homepage()
 
+if menu_id=='Dataset':
+    datasetPage()
 
+
+if menu_id=='Page2':
+    testpage()

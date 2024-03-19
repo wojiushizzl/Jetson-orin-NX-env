@@ -4,6 +4,7 @@ import streamlit as st
 import shutil
 import ruamel.yaml
 from  yolov8_train import train
+from streamlit_extras.grid import grid 
 
 yaml = ruamel.yaml.YAML()
 def create_folder(folder_name):
@@ -81,8 +82,6 @@ def upload_images(selected_projects):
     # 上传图片文件
     uploaded_files = st.file_uploader("上传图片", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
     # st.write(uploaded_files)
-    # 创建一个空的容器用于显示上传的图片
-    uploaded_image_container = st.empty()
 
     # 将上传的图片保存到指定文件夹中
     if uploaded_files is not None:
@@ -93,12 +92,7 @@ def upload_images(selected_projects):
             with open(filename, "wb") as f:
                 f.write(uploaded_file.getvalue())
             st.success(f"图片已成功保存到 {filename}。")
-           # 显示上传的图片
-            uploaded_image_container.image(uploaded_file, caption='上传的图片', use_column_width=True)
 
-    # 添加一个重置按钮
-    if st.button("重置"):
-        uploaded_image_container.empty()
 
 def upload_labels(selected_projects):
     # 创建一个用于保存标签的文件夹
@@ -133,9 +127,10 @@ def homepage():
     selected_projects = st.selectbox('请选择一个项目：', projects_list)
     # 删除项目
     delete_project(selected_projects)
-    # 导入图片至目标项目
-    upload_images(selected_projects)
-    # 导入标签至目标项目
-    upload_labels(selected_projects)
+
+    # # 导入图片至目标项目
+    # upload_images(selected_projects)
+    # # 导入标签至目标项目
+    # upload_labels(selected_projects)
     # 训练
     train_project(selected_projects)

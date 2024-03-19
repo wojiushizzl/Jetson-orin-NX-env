@@ -180,6 +180,7 @@ $ pip install -U streamlit-webrtc
 $ pip install playsound
 $ pip install -U hydralit_components
 $ pip install ruamel.yaml
+$ pip install streamlit-extras
 ```
 
 ## 11. Install VSCode  (optional)
