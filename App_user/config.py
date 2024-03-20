@@ -35,7 +35,10 @@ MODEL_DIR={
     "Classification":ROOT / 'weight' / 'classification'
 }
 
-
+if not os.path.exists(str(MODEL_DIR[TASK_TYPE_LIST[0]])):
+    os.makedirs(str(MODEL_DIR[TASK_TYPE_LIST[0]]))
+if not os.path.exists(str(MODEL_DIR[TASK_TYPE_LIST[1]])):
+    os.makedirs(str(MODEL_DIR[TASK_TYPE_LIST[1]]))
 DETECTION_MODEL_LIST = os.listdir(str(MODEL_DIR[TASK_TYPE_LIST[0]]))
 CLS_MODEL_LIST = os.listdir(str(MODEL_DIR[TASK_TYPE_LIST[1]]))
 
