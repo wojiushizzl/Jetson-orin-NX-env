@@ -21,7 +21,10 @@ st.set_page_config(
 def get_all_projects():
     # 获取项目文件夹下的所有文件夹列表
     folder_list = [f.name for f in os.scandir('projects') if f.is_dir()]
-    return folder_list
+    if folder_list:
+        return folder_list
+    else:
+        return ['No project!']
 
 # 选择项目
 projects_list = get_all_projects()
