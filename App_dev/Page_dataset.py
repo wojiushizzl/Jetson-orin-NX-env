@@ -49,6 +49,25 @@ def upload_labels(selected_projects):
             with open(filename, "wb") as f:
                 f.write(uploaded_file.getvalue())
             st.success(f"标签已成功保存到 {filename}。")
+def upload_classes(selected_projects):
+    # 创建一个用于保存标签的文件夹
+    target_folder = os.path.join('projects', selected_projects)
+    target_folder = os.path.join(target_folder, "datasets")
+    target_folder = os.path.join(target_folder, "labels")
+
+    # 上传标签文件
+    uploaded_files = st.file_uploader("上传class.txt", type=["txt"], accept_multiple_files=True)
+    # st.write(uploaded_files)
+
+    # 将上传的标签保存到指定文件夹中
+    if uploaded_files is not None:
+        for uploaded_file in uploaded_files:
+            # 获取上传文件的文件名
+            filename = os.path.join(target_folder, uploaded_file.name)
+            # 保存文件
+            with open(filename, "wb") as f:
+                f.write(uploaded_file.getvalue())
+            st.success(f"标签已成功保存到 {filename}。")
 
 
 def get_all_projects():
@@ -128,6 +147,9 @@ def datasetPage(selected_projects):
         with st.expander("导入标签", expanded=False):
             # 导入标签至目标项目
             upload_labels(selected_projects)
+        with st.expander("导入标签", expanded=False):
+            # 导入标签至目标项目
+            upload_classes(selected_projects)
 
     with my_grid.container():
         with stylable_container(

@@ -173,6 +173,7 @@ def rename_and_copy(src_file, new_name, dest_folder):
         print(f"文件 {src_file} 已成功重命名为 {new_name} 并复制至 {dest_folder}")
     except Exception as e:
         print(f"重命名和复制文件时出现错误: {e}")
+        
 def deploy(selected_projects):
     #move train/train*/weights/best.pt to App_user/weight/detection/
     train_path=os.path.join('projects',selected_projects,'train')
@@ -193,12 +194,7 @@ def deploy(selected_projects):
 def trainpage(selected_projects):
     # st.write(selected_projects)
 
-    with st.expander("Create Project", expanded=False):
-        # 创建项目
-        create_project()
 
-        # 删除项目
-        delete_project(selected_projects)
     with st.expander("Update yaml file for training", expanded=True):
         # 更新yaml训练配置文件
         update_yaml(selected_projects)
