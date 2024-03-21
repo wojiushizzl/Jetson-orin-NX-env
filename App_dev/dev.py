@@ -9,6 +9,7 @@ import datetime
 from Page_home import homepage
 from Page_dataset import datasetPage
 from Page_train import trainpage
+from Page_test import testpage
 from streamlit_option_menu import option_menu
 
 # make it look nice from the start
@@ -21,10 +22,7 @@ st.set_page_config(
 def get_all_projects():
     # 获取项目文件夹下的所有文件夹列表
     folder_list = [f.name for f in os.scandir('projects') if f.is_dir()]
-    if folder_list:
-        return folder_list
-    else:
-        return ['No project!']
+    return folder_list
 
 # 选择项目
 projects_list = get_all_projects()
@@ -49,7 +47,7 @@ menu_id = hc.nav_bar(
     override_theme=over_theme,
     use_animation=True,
     home_name='Home',
-    login_name='Q&A',
+    login_name='Test',
     hide_streamlit_markers=True,  # will show the st hamburger as well as the navbar now!
     sticky_nav=True,  # at the top or not
     sticky_mode='pinned',  # jumpy or not-jumpy, but sticky or pinned
@@ -67,3 +65,6 @@ if menu_id == 'Datasets':
 
 if menu_id == 'Train':
     trainpage(selected_project)
+
+if menu_id == 'Test':
+    testpage(selected_project)

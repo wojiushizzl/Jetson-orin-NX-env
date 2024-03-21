@@ -6,7 +6,8 @@ import streamlit as st
 import shutil
 import ruamel.yaml
 from  yolov8_train import train
-# from streamlit_extras.grid import grid
+from streamlit_extras.grid import grid
+from streamlit_extras.stylable_container import stylable_container
 
 yaml = ruamel.yaml.YAML()
 def create_folder(folder_name):
@@ -190,17 +191,23 @@ def deploy(selected_projects):
 
 
 def trainpage(selected_projects):
-    # 创建项目
-    create_project()
+    # st.write(selected_projects)
 
-    # 删除项目
-    delete_project(selected_projects)
+    with st.expander("Create Project", expanded=False):
+        # 创建项目
+        create_project()
 
-    # 更新yaml训练配置文件
-    update_yaml(selected_projects)
+        # 删除项目
+        delete_project(selected_projects)
+    with st.expander("Update yaml file for training", expanded=True):
+        # 更新yaml训练配置文件
+        update_yaml(selected_projects)
 
-    # 训练
-    train_project(selected_projects)
+    with st.expander("Start train", expanded=True):
 
-    # 部署
-    deploy(selected_projects)
+        # 训练
+        train_project(selected_projects)
+
+    with st.expander("Deploy to User App", expanded=True):
+        # 部署
+        deploy(selected_projects)
