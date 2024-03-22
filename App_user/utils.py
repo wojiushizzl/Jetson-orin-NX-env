@@ -206,9 +206,7 @@ def infer_uploaded_webcam_det(conf, model):
     stream=webrtc_streamer(
         key="example",
         video_frame_callback=video_frame_callback,
-        rtc_configuration={
-            "iceServers":[{"urls":["stun:stun.1.google.com:19302"]}]
-        }
+
     )
     while stream.state.playing:
         with lock:
