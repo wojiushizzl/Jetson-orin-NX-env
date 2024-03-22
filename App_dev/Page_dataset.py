@@ -147,7 +147,7 @@ def datasetPage(selected_projects):
         with st.expander("导入标签", expanded=False):
             # 导入标签至目标项目
             upload_labels(selected_projects)
-        with st.expander("导入标签", expanded=False):
+        with st.expander("导入classes.txt", expanded=False):
             # 导入标签至目标项目
             upload_classes(selected_projects)
 
