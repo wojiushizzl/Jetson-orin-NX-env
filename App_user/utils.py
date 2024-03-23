@@ -168,18 +168,32 @@ def puttext(text,res_plotted,color):
 
 
 
-def infer_uploaded_webcam_det(conf, model,frame_num=30):
+def infer_uploaded_webcam_det(conf, model,target_list,logic,output_list,reaction_speed):
     """
     Execute inference for webcam.
     :param conf: Confidence of YOLOv8 model
     :param model: An instance of the `YOLOv8` class containing the YOLOv8 model.
     :return: None
     """
+    st.write(target_list)
+    st.write(logic)
+    st.write(output_list)
     def play_audio():
         alarm_script_path="alarm_run.py"
         subprocess.Popen(["python",alarm_script_path])
-    
+    def Rs485():
+        print("Rs485")
+
+    def Stop():
+        print("Stop")
+    def check(logic,boxes):
+        num=len(list(boxes.cls))
+        result=True if num >0 else False
+        return result
+
+
     lock=threading.Lock()
+    frame_num=reaction_speed
     zzl=[0]*frame_num
 
     def video_frame_callback(frame):
@@ -190,13 +204,13 @@ def infer_uploaded_webcam_det(conf, model,frame_num=30):
         # image=np.fliplr(image)
 
         # Predict the objects in the image using YOLOv8 model
-        res = model.predict(image, conf=conf)
+        res = model.predict(image, conf=conf,classes=target_list,vid_stride=5)
         boxes = res[0].boxes
-        if len(list(boxes.cls)) > 0:
-            result = "Detected"
+        if check(logic,boxes):
+            result = "NOK"
             color=[0, 0, 255]
         else:
-            result = "No detection"
+            result = "OK"
             color = [0, 255, 0]
         # Plot the detected objects on the video frame
         count=len(list(boxes.cls))
@@ -204,7 +218,7 @@ def infer_uploaded_webcam_det(conf, model,frame_num=30):
         puttext(result,res_plotted,color)
 
         with lock:
-            if len(list(boxes.cls))>0:
+            if check(logic,boxes)>0:
                 zzl.append(1)
             else:
                 zzl.append(0)
@@ -222,7 +236,14 @@ def infer_uploaded_webcam_det(conf, model,frame_num=30):
             time.sleep(0.001)
             if x>frame_num*0.8:
                 try:
-                    play_audio()
+                    if 'Alarm' in output_list:
+                        play_audio()
+                    elif 'Rs485' in output_list:
+                        Rs485()
+                    elif 'Stop' in output_list:
+                        Stop()
+                    else:
+                        play_audio
                     zzl = [0] * frame_num
                 except:
                     print('error, play alarm failed')

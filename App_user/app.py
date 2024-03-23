@@ -17,17 +17,17 @@ st.set_page_config(
 
 def model_config():
     # model options
-    task_type = st.selectbox(
-        "Select Task",
-        config.TASK_TYPE_LIST
-    )
-
+    # task_type = st.selectbox(
+    #     "Select Task",
+    #     config.TASK_TYPE_LIST
+    # )
+    task_type='Detection'
     model_type = None
     model_type = st.selectbox(
             "Select Model",
             config.MODEL_LIST[task_type]
         )
-
+    
 
     confidence = float(st.slider(
         "Select Model Confidence", 30, 100, 30)) / 100
@@ -42,10 +42,10 @@ def model_config():
     # load pretrained DL model
     try:
         model,classes = load_model(model_path)
-        st.write(classes)
+
     except Exception as e:
         st.error(f"Unable to load model. Please check the specified path: {model_path}")
-    return task_type,model,confidence
+    return task_type,model,confidence,classes
 
 def source_switch():
     # image/video options
@@ -58,18 +58,34 @@ def source_switch():
 
 
 def target_select():
-    ### find the classes from the project , output classes selected list ###
-    target_list=st.multiselect("Target",[1,2,3,],default=[1])
-    return target_list
+    '''
+      find the classes from the project , output classes selected list 
+      target_list:list[int]
+    '''
+    classes_list=['large','small']
+    target_list=st.multiselect("Target",classes_list,default=['small'])
+    target_list_index=[]
+    for t in target_list:
+        target_list_index.append(classes_list.index(t))
+    # st.write(target_list_index)
+    return target_list_index
 
 def logic_select():
     ### select the logic  ###
-    logic=st.multiselect("Logic",[1,2,3,],default=[1])
+    logic=st.selectbox("Logic",[
+        "L10 flange",
+        "HS Pachage",
+        "HS Rolling"
+        ],index=0)
     return logic
 
 def output_select():
     ### select the output ###
-    output_list=st.multiselect("Output",[1,2,3,],default=[1])
+    output_list=st.multiselect("Output",[
+        'Alarm',
+        'Rs485',
+        'Stop',
+        ],default=['Alarm'])
     reaction_speed=int(st.slider(
         "Select Reaction Speed", 10, 100, 30)) 
     return output_list,reaction_speed
@@ -79,17 +95,17 @@ def output_select():
 st.sidebar.header("Customer Config")
 with st.sidebar:
     with st.expander("Model Config", expanded=True):
-        task_type,model,confidence=model_config()
+        task_type,model,confidence,classes=model_config()
     with st.expander("Video&Image Switch", expanded=False):
         source_selectbox=source_switch()
     with st.expander("Target Select", expanded=False):
         target_list=target_select()
     with st.expander("Logic Select",expanded=False):
-        logic_list=logic_select()
+        logic=logic_select()
     with st.expander("Output Select",expanded=True):
         output_list,reaction_speed=output_select()
 
-
+# st.write(classes)
 source_img = None
 
 
@@ -99,7 +115,7 @@ elif source_selectbox == config.SOURCES_LIST[1]: # Video
     infer_uploaded_video(confidence, model)
 elif source_selectbox == config.SOURCES_LIST[2]: # Webcam
     if task_type== config.TASK_TYPE_LIST[0]:
-        infer_uploaded_webcam_det(confidence, model,reaction_speed) # Detection task
+        infer_uploaded_webcam_det(confidence, model,target_list,logic,output_list,reaction_speed) # Detection task
 
 
 else:
