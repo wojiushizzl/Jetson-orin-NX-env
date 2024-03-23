@@ -55,7 +55,8 @@ def load_model(model_path):
         A YOLO object detection model.
     """
     model = YOLO(model_path)
-    return model
+    classes=model.__class__.names.fget
+    return model,classes
 
 
 def infer_uploaded_image(conf, model):
@@ -167,7 +168,7 @@ def puttext(text,res_plotted,color):
 
 
 
-def infer_uploaded_webcam_det(conf, model):
+def infer_uploaded_webcam_det(conf, model,frame_num=30):
     """
     Execute inference for webcam.
     :param conf: Confidence of YOLOv8 model
@@ -179,9 +180,8 @@ def infer_uploaded_webcam_det(conf, model):
         subprocess.Popen(["python",alarm_script_path])
     
     lock=threading.Lock()
-    frame_num=30
     zzl=[0]*frame_num
-    
+
     def video_frame_callback(frame):
         # Resize the image to a standard size
         image = frame.to_ndarray(format="bgr24")

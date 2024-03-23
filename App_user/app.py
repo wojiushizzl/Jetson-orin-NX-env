@@ -41,7 +41,8 @@ def model_config():
 
     # load pretrained DL model
     try:
-        model = load_model(model_path)
+        model,classes = load_model(model_path)
+        st.write(classes)
     except Exception as e:
         st.error(f"Unable to load model. Please check the specified path: {model_path}")
     return task_type,model,confidence
@@ -58,24 +59,26 @@ def source_switch():
 
 def target_select():
     ### find the classes from the project , output classes selected list ###
-    target_list=[]
+    target_list=st.multiselect("Target",[1,2,3,],default=[1])
     return target_list
 
 def logic_select():
     ### select the logic  ###
-    logic=[]
+    logic=st.multiselect("Logic",[1,2,3,],default=[1])
     return logic
 
 def output_select():
     ### select the output ###
-    output_list=[]
-    return output_list
+    output_list=st.multiselect("Output",[1,2,3,],default=[1])
+    reaction_speed=int(st.slider(
+        "Select Reaction Speed", 10, 100, 30)) 
+    return output_list,reaction_speed
 
 
 # sidebar
 st.sidebar.header("Customer Config")
 with st.sidebar:
-    with st.expander("Model Config", expanded=False):
+    with st.expander("Model Config", expanded=True):
         task_type,model,confidence=model_config()
     with st.expander("Video&Image Switch", expanded=False):
         source_selectbox=source_switch()
@@ -83,8 +86,8 @@ with st.sidebar:
         target_list=target_select()
     with st.expander("Logic Select",expanded=False):
         logic_list=logic_select()
-    with st.expander("Output Select",expanded=False):
-        output_list=output_select()
+    with st.expander("Output Select",expanded=True):
+        output_list,reaction_speed=output_select()
 
 
 source_img = None
@@ -96,7 +99,7 @@ elif source_selectbox == config.SOURCES_LIST[1]: # Video
     infer_uploaded_video(confidence, model)
 elif source_selectbox == config.SOURCES_LIST[2]: # Webcam
     if task_type== config.TASK_TYPE_LIST[0]:
-        infer_uploaded_webcam_det(confidence, model) # Detection task
+        infer_uploaded_webcam_det(confidence, model,reaction_speed) # Detection task
 
 
 else:
