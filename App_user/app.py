@@ -28,7 +28,6 @@ def model_config():
             config.MODEL_LIST[task_type]
         )
     
-
     confidence = float(st.slider(
         "Select Model Confidence", 30, 100, 30)) / 100
 
@@ -62,8 +61,8 @@ def target_select(classes_list=['large','small']):
       find the classes from the project , output classes selected list 
       target_list:list[int]
     '''
-    classes_list=['large','small']
-    target_list=st.multiselect("Target",classes_list,default=['small'])
+    # classes_list=['large','small']
+    target_list=st.multiselect("Target",classes_list,default=[classes_list[0]])
     target_list_index=[]
     for t in target_list:
         target_list_index.append(classes_list.index(t))
@@ -105,7 +104,7 @@ with st.sidebar:
     with st.expander("Output Select",expanded=True):
         output_list,reaction_speed=output_select()
 
-# st.write(classes)
+# st.write(classes_list)
 source_img = None
 
 

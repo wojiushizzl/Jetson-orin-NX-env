@@ -17,7 +17,9 @@ import av
 import numpy as np
 import threading
 import subprocess
-
+from ultralytics.nn.autobackend import check_class_names
+import torch
+import yaml
 def _display_detected_frames(conf, model, st_frame, image):
     """
     Display the detected objects on a video frame using the YOLOv8 model.
@@ -46,7 +48,7 @@ def _display_detected_frames(conf, model, st_frame, image):
 @st.cache_resource
 def load_model(model_path):
     """
-    Loads a YOLO object detection model from the specified model_path.
+    Lo      ads a YOLO object detection model from the specified model_path.
 
     Parameters:
         model_path (str): The path to the YOLO model file.
@@ -55,8 +57,11 @@ def load_model(model_path):
         A YOLO object detection model.
     """
     model = YOLO(model_path)
-    classes=model.__class__.names.fget
-    return model,classes
+
+    classes_dir=model.names
+    classes_list=list(classes_dir.values())
+
+    return model,classes_list
 
 
 def infer_uploaded_image(conf, model):
@@ -175,12 +180,11 @@ def infer_uploaded_webcam_det(conf, model,target_list,logic,output_list,reaction
     :param model: An instance of the `YOLOv8` class containing the YOLOv8 model.
     :return: None
     """
-    st.write(target_list)
-    st.write(logic)
-    st.write(output_list)
+    st.write(str(target_list)+logic+str(output_list))
     def play_audio():
         alarm_script_path="alarm_run.py"
         subprocess.Popen(["python",alarm_script_path])
+
     def Rs485():
         print("Rs485")
 
