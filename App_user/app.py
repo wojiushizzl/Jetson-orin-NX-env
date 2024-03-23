@@ -41,11 +41,11 @@ def model_config():
 
     # load pretrained DL model
     try:
-        model,classes = load_model(model_path)
+        model,classes_list = load_model(model_path)
 
     except Exception as e:
         st.error(f"Unable to load model. Please check the specified path: {model_path}")
-    return task_type,model,confidence,classes
+    return task_type,model,confidence,classes_list
 
 def source_switch():
     # image/video options
@@ -57,7 +57,7 @@ def source_switch():
     return source_selectbox
 
 
-def target_select():
+def target_select(classes_list=['large','small']):
     '''
       find the classes from the project , output classes selected list 
       target_list:list[int]
@@ -95,11 +95,11 @@ def output_select():
 st.sidebar.header("Customer Config")
 with st.sidebar:
     with st.expander("Model Config", expanded=True):
-        task_type,model,confidence,classes=model_config()
+        task_type,model,confidence,classes_list=model_config()
     with st.expander("Video&Image Switch", expanded=False):
         source_selectbox=source_switch()
     with st.expander("Target Select", expanded=False):
-        target_list=target_select()
+        target_list=target_select(classes_list)
     with st.expander("Logic Select",expanded=False):
         logic=logic_select()
     with st.expander("Output Select",expanded=True):

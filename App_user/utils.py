@@ -186,6 +186,7 @@ def infer_uploaded_webcam_det(conf, model,target_list,logic,output_list,reaction
 
     def Stop():
         print("Stop")
+        
     def check(logic,boxes):
         num=len(list(boxes.cls))
         result=True if num >0 else False
