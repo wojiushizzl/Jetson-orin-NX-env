@@ -143,6 +143,30 @@ def infer_uploaded_video(conf, model):
                     st.error(f"Error loading video: {e}")
 
 
+def puttext(text,res_plotted,color):
+    # 添加文字
+    text = text
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    font_scale = 1
+    font_thickness = 2
+    font_color =color  # 白色
+    # 获取文本的大小
+    text_size = cv2.getTextSize(text, font, font_scale, font_thickness)[0]
+    text_position = ((res_plotted.shape[1] - text_size[0]) // 2, (res_plotted.shape[0] + text_size[1]) // 2)
+
+    # 在图像上添加文字
+    cv2.putText(res_plotted, text, text_position, font, font_scale, font_color, font_thickness)
+
+    # 在图像边框涂成红色
+    border_width = 10
+    res_plotted[:border_width, :] =color
+    res_plotted[-border_width:, :] =color
+    res_plotted[:, :border_width] =color
+    res_plotted[:, -border_width:] =color
+
+
+
+
 def infer_uploaded_webcam_det(conf, model):
     """
     Execute inference for webcam.
@@ -153,16 +177,17 @@ def infer_uploaded_webcam_det(conf, model):
     def play_audio():
         alarm_script_path="alarm_run.py"
         subprocess.Popen(["python",alarm_script_path])
-
+    
     lock=threading.Lock()
     frame_num=30
     zzl=[0]*frame_num
+    
     def video_frame_callback(frame):
         # Resize the image to a standard size
         image = frame.to_ndarray(format="bgr24")
         # print("图像尺寸",image.shape)
         # image = cv2.resize(image, (640, 640))
-        image=np.fliplr(image)
+        # image=np.fliplr(image)
 
         # Predict the objects in the image using YOLOv8 model
         res = model.predict(image, conf=conf)
@@ -176,26 +201,8 @@ def infer_uploaded_webcam_det(conf, model):
         # Plot the detected objects on the video frame
         count=len(list(boxes.cls))
         res_plotted = res[0].plot()
+        puttext(result,res_plotted,color)
 
-        # 添加文字
-        text = result
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale = 1
-        font_thickness = 2
-        font_color =color  # 白色
-        # 获取文本的大小
-        text_size = cv2.getTextSize(text, font, font_scale, font_thickness)[0]
-        text_position = ((res_plotted.shape[1] - text_size[0]) // 2, (res_plotted.shape[0] + text_size[1]) // 2)
-
-        # 在图像上添加文字
-        cv2.putText(res_plotted, text, text_position, font, font_scale, font_color, font_thickness)
-
-        # 在图像边框涂成红色
-        border_width = 10
-        res_plotted[:border_width, :] =color
-        res_plotted[-border_width:, :] =color
-        res_plotted[:, :border_width] =color
-        res_plotted[:, -border_width:] =color
         with lock:
             if len(list(boxes.cls))>0:
                 zzl.append(1)

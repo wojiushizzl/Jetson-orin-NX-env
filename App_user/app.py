@@ -14,48 +14,78 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
-# main page heading
-# st.title("Visualization")
 
-# sidebar
-st.sidebar.header("Model Config")
-
-# model options
-task_type = st.sidebar.selectbox(
-    "Select Task",
-    config.TASK_TYPE_LIST
-)
-
-model_type = None
-model_type = st.sidebar.selectbox(
-        "Select Model",
-        config.MODEL_LIST[task_type]
+def model_config():
+    # model options
+    task_type = st.selectbox(
+        "Select Task",
+        config.TASK_TYPE_LIST
     )
 
+    model_type = None
+    model_type = st.selectbox(
+            "Select Model",
+            config.MODEL_LIST[task_type]
+        )
 
-confidence = float(st.sidebar.slider(
-    "Select Model Confidence", 30, 100, 30)) / 100
 
-model_path = ""
+    confidence = float(st.slider(
+        "Select Model Confidence", 30, 100, 30)) / 100
 
-if model_type:
-    model_path=Path(config.MODEL_DIR[task_type],str(model_type))
-else:
-    st.error("Please Select Model in Sidebar")
+    model_path = ""
 
-# load pretrained DL model
-try:
-    model = load_model(model_path)
-except Exception as e:
-    st.error(f"Unable to load model. Please check the specified path: {model_path}")
+    if model_type:
+        model_path=Path(config.MODEL_DIR[task_type],str(model_type))
+    else:
+        st.error("Please Select Model in Sidebar")
 
-# image/video options
-st.sidebar.header("Image/Video Config")
-source_selectbox = st.sidebar.selectbox(
-    "Select Source",
-    config.SOURCES_LIST,
-    index=2
-)
+    # load pretrained DL model
+    try:
+        model = load_model(model_path)
+    except Exception as e:
+        st.error(f"Unable to load model. Please check the specified path: {model_path}")
+    return task_type,model,confidence
+
+def source_switch():
+    # image/video options
+    source_selectbox = st.selectbox(
+        "Select Source",
+        config.SOURCES_LIST,
+        index=2
+    )
+    return source_selectbox
+
+
+def target_select():
+    ### find the classes from the project , output classes selected list ###
+    target_list=[]
+    return target_list
+
+def logic_select():
+    ### select the logic  ###
+    logic=[]
+    return logic
+
+def output_select():
+    ### select the output ###
+    output_list=[]
+    return output_list
+
+
+# sidebar
+st.sidebar.header("Customer Config")
+with st.sidebar:
+    with st.expander("Model Config", expanded=False):
+        task_type,model,confidence=model_config()
+    with st.expander("Video&Image Switch", expanded=False):
+        source_selectbox=source_switch()
+    with st.expander("Target Select", expanded=False):
+        target_list=target_select()
+    with st.expander("Logic Select",expanded=False):
+        logic_list=logic_select()
+    with st.expander("Output Select",expanded=False):
+        output_list=output_select()
+
 
 source_img = None
 
